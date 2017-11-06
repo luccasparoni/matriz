@@ -37,6 +37,6 @@ void print_matriz(MATRIZ* matriz);//ok
 
 void resumo_matriz(MATRIZ* matriz);//ok
 
-MATRIZ* ler_matriz(const char nome[]);
+MATRIZ *ler_matriz(const char nome[]);
 
 #endif
