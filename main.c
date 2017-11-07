@@ -1,37 +1,64 @@
+/*
+ * File:   main.c
+ * Author: paulovich
+ *
+ * Created on August 8, 2016, 8:35 AM
+ */
+
 #include <stdio.h>
-#include "matriz_esparsas.h"
-#include "matrizesparsas.c"
 #include <stdlib.h>
+#include "matrizesparsas.c"
+#include "matriz_esparsa.h"
 
-void main(){
-	MATRIZ* m1 = criar_matriz(3, 3);
+/*
+ *
+ */
+int main(int argc, char** argv) {
+  MATRIZ *matriz, *matriz2, *matriz3, *matriz4;
 
-	MATRIZ* m2 = criar_matriz(3, 3);
-	set_matriz(m1, 1, 1, 4);
-	set_matriz(m1, 1, 3, 4);
-	set_matriz(m1, 2, 2, 4);
-	set_matriz(m1, 3, 1, 4);
-	set_matriz(m1, 2, 3, 4);
-	set_matriz(m2, 2, 1, 8);
-	set_matriz(m2, 2, 2, 36);
-	set_matriz(m2, 3, 2, 8);
-	// MATRIZ* m3 = somar_matriz(m1, m2);
-	print_matriz(m2);
-	printf("\n" );
-	// print_matriz(m2);
-	//
-	printf("\n" );
-	// printf("\n" );
-	// print_matriz(m3);
-	// resumo_matriz(m3);
+  matriz = ler_matriz("m1.txt");
+  matriz2 = somar_matriz(matriz, matriz);
+  matriz3 = multiplicar_matriz(matriz2, matriz2);
 
-	MATRIZ* m4 = transposta_matriz(m2);
-	print_matriz(m4);
-	double x = determinante_matriz(m4);
+  printf("Matriz 1\n");
+  print_matriz(matriz);
+  printf("Soma \n");
+  print_matriz(matriz2);
+  printf("Multiplicação\n");
+  print_matriz(matriz3);
+  printf("Transposta\n");
+  print_matriz(transposta_matriz(matriz3));
+
+  apagar_matriz(matriz);
+  apagar_matriz(matriz2);
+  apagar_matriz(matriz3);
+
+  matriz = ler_matriz("m50x50.txt");
+  matriz2 = somar_matriz(matriz, matriz);
+  matriz3 = multiplicar_matriz(matriz2, matriz2);
+
+  printf("Matriz 50x50\n");
+  resumo_matriz(matriz);
+  printf("Soma \n");
+  resumo_matriz(matriz2);
+  printf("Multiplicação\n");
+  resumo_matriz(matriz3);
+  printf("Transposta\n");
+  resumo_matriz(transposta_matriz(matriz3));
 
 
 
-	apagar_matriz(&m1);
-	apagar_matriz(&m2);
 
+  matriz4 = ler_matriz("m4x4.txt");
+  printf("Matriz 4x4\n");
+  print_matriz(matriz4);
+  // printf("Determinante: %lf\n", determinante_matriz(matriz4));
+
+  apagar_matriz(matriz);
+  apagar_matriz(matriz2);
+  apagar_matriz(matriz3);
+  apagar_matriz(matriz4);
+
+
+  return (EXIT_SUCCESS);
 }

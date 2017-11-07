@@ -1,4 +1,4 @@
-#include "matriz_esparsas.h"
+#include "matriz_esparsa.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -29,10 +29,10 @@ MATRIZ *criar_matriz(int nr_linhas, int nr_colunas){
 	return mat;
 }
 
-void apagar_matriz(MATRIZ **matriz) {
+void apagar_matriz(MATRIZ *matriz) {
 	int k;
-	for (k = 0; k < (*matriz)->nr_linhas; k++) {//itera todas as linhas da matriz
-		CELULA* aux = (*matriz)->linhas[k]->direita;
+	for (k = 0; k < (matriz)->nr_linhas; k++) {//itera todas as linhas da matriz
+		CELULA* aux = (matriz)->linhas[k]->direita;
 
 		while (aux->direita->coluna != -1) {//itera em cada linha pelos elementos que não são nulos para remover cada um deles
 			CELULA* remover = aux;
@@ -40,12 +40,12 @@ void apagar_matriz(MATRIZ **matriz) {
 			free(remover);
 		}
 
-		free((*matriz)->linhas[k]);//libera o espaço referente àquela linha
+		free((matriz)->linhas[k]);//libera o espaço referente àquela linha
 	}
-	free((*matriz)->linhas);
-	free((*matriz)->colunas);
-	free((*matriz));//libera o ponteiro da matriz
-	*matriz = NULL;
+	free((matriz)->linhas);
+	free((matriz)->colunas);
+	free((matriz));//libera o ponteiro da matriz
+	matriz = NULL;
 }
 
 void print_matriz(MATRIZ *matriz){//função para imprimir a matriz
@@ -117,7 +117,7 @@ double get_matriz(MATRIZ* matriz, int linha, int coluna){//função responsavel 
 	return 0;//retorna 0 se não encontrou nenhum valor
 }
 
-MATRIZ *somar_matriz(MATRIZ* m1, MATRIZ* m2){//função responsável ppor somar duas matrizes
+MATRIZ *somar_matriz(MATRIZ* m1, MATRIZ* m2){//função responsável por somar duas matrizes
 	if(m1->nr_linhas != m2->nr_linhas || m1->nr_colunas != m2->nr_colunas){//condicional para poder somar matrizes
 		return NULL;
 	}
@@ -146,7 +146,7 @@ void resumo_matriz(MATRIZ* matriz){//igual a função print_matriz, porem só im
 
 MATRIZ *ler_matriz(const char arquivo[]){
 	FILE *file;
-	file = fopen("arquivo.txt", "r");
+	file = fopen(arquivo, "r");
 
 	int nl;   // numero de linhas da matriz do arquivo
 	int nc;   // numero de colunas da matriz do arquivo
@@ -162,7 +162,7 @@ MATRIZ *ler_matriz(const char arquivo[]){
 		for(j=0; j<nc; j++){
 			fscanf(file, "%f", &valor);
 			if(valor != 0){		//se for igual à zero nao é necessário mexer na matriz esparsa
-				set_matriz(mat, i, j, valor);
+				set_matriz(mat, i+1, j+1, valor);
 			}
 		}
 	}
