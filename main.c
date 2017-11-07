@@ -14,7 +14,7 @@
  *
  */
 int main(int argc, char** argv) {
-  MATRIZ *matriz, *matriz2, *matriz3, *matriz4;
+  MATRIZ_ESPARSA *matriz, *matriz2, *matriz3, *matriz4;
 
   matriz = ler_matriz("m1.txt");
   matriz2 = somar_matriz(matriz, matriz);

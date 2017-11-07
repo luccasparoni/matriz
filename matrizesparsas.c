@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-MATRIZ *criar_matriz(int nr_linhas, int nr_colunas){
+MATRIZ_ESPARSA *criar_matriz(int nr_linhas, int nr_colunas){
 //Função responsàvel pela criação da matriz, e alocação de memória necessária
-	MATRIZ* mat = (MATRIZ*) malloc(sizeof(MATRIZ));//aloca espaco para o ponteiro da matriz
+	MATRIZ_ESPARSA* mat = (MATRIZ_ESPARSA*) malloc(sizeof(MATRIZ_ESPARSA));//aloca espaco para o ponteiro da matriz
 
 	mat->nr_linhas = nr_linhas;
 	mat->nr_colunas = nr_colunas;
@@ -29,7 +29,7 @@ MATRIZ *criar_matriz(int nr_linhas, int nr_colunas){
 	return mat;
 }
 
-void apagar_matriz(MATRIZ *matriz) {
+void apagar_matriz(MATRIZ_ESPARSA *matriz) {
 	int k;
 	for (k = 0; k < (matriz)->nr_linhas; k++) {//itera todas as linhas da matriz
 		CELULA* aux = (matriz)->linhas[k]->direita;
@@ -48,7 +48,7 @@ void apagar_matriz(MATRIZ *matriz) {
 	matriz = NULL;
 }
 
-void print_matriz(MATRIZ *matriz){//função para imprimir a matriz
+void print_matriz(MATRIZ_ESPARSA *matriz){//função para imprimir a matriz
 	int i,j;
 	for(i=0; i<matriz->nr_linhas; i++){//itera pelo numero de linhas da matriz
 		for(j=0; j<matriz->nr_colunas;j++){//itera pelo numero de colunas da matriz
@@ -59,7 +59,7 @@ void print_matriz(MATRIZ *matriz){//função para imprimir a matriz
 	}
 }
 
-int set_matriz(MATRIZ *matriz, int linha, int coluna, double valor){//função rsponsável por setar valores à celulas específicas da matriz
+int set_matriz(MATRIZ_ESPARSA *matriz, int linha, int coluna, double valor){//função rsponsável por setar valores à celulas específicas da matriz
 	CELULA* cel_nova;//cria uma nova célula
 	CELULA* cel_at = matriz->linhas[linha-1];//cria uma celula para guardar a celula seguinte à nova
 	CELULA* cel_aux = matriz->linhas[linha-1];//cria uma célula para guardar a celula anterior à celula adicionada
@@ -102,7 +102,7 @@ int set_matriz(MATRIZ *matriz, int linha, int coluna, double valor){//função r
 	//colocar excessao do 0
 }
 
-double get_matriz(MATRIZ* matriz, int linha, int coluna){//função responsavel por retornar o valor de uma celula
+double get_matriz(MATRIZ_ESPARSA* matriz, int linha, int coluna){//função responsavel por retornar o valor de uma celula
 	if(linha <= matriz->nr_linhas && coluna <= matriz->nr_colunas){//só fara alguma coisa se a linha e a coluna dadas pertencerem à matriz
 		CELULA* aux = matriz->linhas[linha-1];
 		while(aux->coluna != coluna){
@@ -117,11 +117,11 @@ double get_matriz(MATRIZ* matriz, int linha, int coluna){//função responsavel 
 	return 0;//retorna 0 se não encontrou nenhum valor
 }
 
-MATRIZ *somar_matriz(MATRIZ* m1, MATRIZ* m2){//função responsável por somar duas matrizes
+MATRIZ_ESPARSA *somar_matriz(MATRIZ_ESPARSA* m1, MATRIZ_ESPARSA* m2){//função responsável por somar duas matrizes
 	if(m1->nr_linhas != m2->nr_linhas || m1->nr_colunas != m2->nr_colunas){//condicional para poder somar matrizes
 		return NULL;
 	}
-	MATRIZ* msoma = criar_matriz(m1->nr_linhas, m1->nr_colunas);//cria a matriz resultante
+	MATRIZ_ESPARSA* msoma = criar_matriz(m1->nr_linhas, m1->nr_colunas);//cria a matriz resultante
 	int i,j;
 	for(i=0; i<m1->nr_linhas; i++){
 		for(j=0; j<m1->nr_colunas; j++){
@@ -132,7 +132,7 @@ MATRIZ *somar_matriz(MATRIZ* m1, MATRIZ* m2){//função responsável por somar d
 
 }
 
-void resumo_matriz(MATRIZ* matriz){//igual a função print_matriz, porem só imprime os valores diferentes de 0
+void resumo_matriz(MATRIZ_ESPARSA* matriz){//igual a função print_matriz, porem só imprime os valores diferentes de 0
 	int i,j;
 	for(i=0; i<matriz->nr_linhas; i++){
 		for(j=0; j<matriz->nr_colunas;j++){
@@ -144,7 +144,7 @@ void resumo_matriz(MATRIZ* matriz){//igual a função print_matriz, porem só im
 	}
 }
 
-MATRIZ *ler_matriz(const char arquivo[]){
+MATRIZ_ESPARSA *ler_matriz(const char arquivo[]){
 	FILE *file;
 	file = fopen(arquivo, "r");
 
@@ -152,7 +152,7 @@ MATRIZ *ler_matriz(const char arquivo[]){
 	int nc;   // numero de colunas da matriz do arquivo
 
 	fscanf(file, "%d %d", &nl, &nc);
-	MATRIZ* mat = criar_matriz(nl, nc);
+	MATRIZ_ESPARSA* mat = criar_matriz(nl, nc);
 
 	int i; // i e j para percorrer todos os elementos da matriz
 	int j;
@@ -171,9 +171,9 @@ MATRIZ *ler_matriz(const char arquivo[]){
 	return mat;
 }
 
-MATRIZ *multiplicar_matriz(MATRIZ* m1, MATRIZ* m2){
+MATRIZ_ESPARSA *multiplicar_matriz(MATRIZ_ESPARSA* m1, MATRIZ_ESPARSA* m2){
 	int i,j,k;
-	MATRIZ* m3 = criar_matriz((m1)->nr_linhas, (m2)->nr_colunas);//cria a matriz resultante
+	MATRIZ_ESPARSA* m3 = criar_matriz((m1)->nr_linhas, (m2)->nr_colunas);//cria a matriz resultante
 	double produto=0;
 	if(m1->nr_colunas != m2->nr_linhas){//condicional para poder multiplicar duas matrizes
 		return NULL;
@@ -192,9 +192,9 @@ MATRIZ *multiplicar_matriz(MATRIZ* m1, MATRIZ* m2){
 	return m3;
 }
 
-MATRIZ* transposta_matriz(MATRIZ* matriz){
+MATRIZ_ESPARSA* transposta_matriz(MATRIZ_ESPARSA* matriz){
 	int i,j;
-	MATRIZ* m = criar_matriz(matriz->nr_colunas, matriz->nr_linhas);
+	MATRIZ_ESPARSA* m = criar_matriz(matriz->nr_colunas, matriz->nr_linhas);
 	for(i=1; i<= matriz->nr_linhas;i++){
 		for(j=1; j<= matriz->nr_colunas; j++){
 			set_matriz(m, i, j, get_matriz(matriz, j, i));
@@ -203,6 +203,6 @@ MATRIZ* transposta_matriz(MATRIZ* matriz){
 	return m;
 }
 
-double determinante_matriz(MATRIZ* matriz){
+double determinante_matriz(MATRIZ_ESPARSA* matriz){
 
 }
